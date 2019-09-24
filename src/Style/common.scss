@@ -1,0 +1,327 @@
+html,
+body,
+header,
+section,
+footer,
+div,
+ul,
+ol,
+li,
+img,
+a,
+span,
+em,
+del,
+legend,
+center,
+strong,
+var,
+fieldset,
+form,
+label,
+dl,
+dt,
+dd,
+cite,
+input,
+hr,
+time,
+mark,
+code,
+figcaption,
+figure,
+textarea,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    font-style: normal;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-decoration: none;
+    font-weight: normal;
+    font-size:100%
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    font-family: PingFang SC,Source Han Sans CN;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    -webkit-text-size-adjust: 100% !important;
+    cursor: default;
+    background-repeat: no-repeat;
+    background: rgba(250, 250, 250, 1);
+    color: #323233
+}
+
+
+
+nav,
+article,
+aside,
+details,
+main,
+header,
+footer,
+section,
+fieldset,
+figcaption,
+figure {
+    display: block;
+}
+
+img,
+a,
+button,
+em,
+del,
+strong,
+var,
+label,
+cite,
+small,
+time,
+mark,
+code,
+textarea {
+    display: inline-block;
+}
+img{
+    width: 100%;
+    height: 100%;
+}
+header,
+footer {
+    position: relative;
+    /*相对定位,移动的距离是该元素的原来的位置所移动的位置*/
+}
+
+ol,
+ul,
+li {
+    list-style: none;
+}
+
+input,
+button,
+textarea,
+select {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    -webkit-appearance: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+textarea {
+    resize: none
+}
+
+input::-webkit-search-decoration,
+input::-webkit-search-cancel-button {
+    display: none;
+}
+
+
+span {
+    display: inline-block;
+}
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+a,
+a:visited {
+    text-decoration: none;
+}
+
+a {
+    color: inherit;
+}
+
+label{
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+td,
+th {
+    padding: 0;
+}
+
+
+/*字体大小*/
+.fz100 {
+    font-size: 100px;
+  }
+  
+  .fz80 {
+    font-size: 80px;
+  }
+  
+  .fz70 {
+    font-size: 80px;
+  }
+  
+  .fz68 {
+    font-size: 68px;
+  }
+  
+  .fz60 {
+    font-size: 60px;
+  }
+  
+  .fz52 {
+    font-size: 52px;
+  }
+  
+  .fz50 {
+    font-size: 50px;
+  }
+  
+  .fz48 {
+    font-size: 48px;
+  }
+  
+  .fz44 {
+    font-size: 44px;
+  }
+  
+  .fz40 {
+    font-size: 40px;
+  }
+  
+  .fz38 {
+    font-size: 38px;
+  }
+  
+  .fz36 {
+    font-size: 36px;
+  }
+  
+  .fz34 {
+    font-size: 34px;
+  }
+  
+  .fz32 {
+    font-size: 32px;
+  }
+  
+  .fz30 {
+    font-size: 30px;
+  }
+  
+  .fz28 {
+    font-size: 28px;
+  }
+  
+  .fz26 {
+    font-size: 26px;
+  }
+  
+  .fz25 {
+    font-size: 25px;
+  }
+  
+  .fz24 {
+    font-size: 24px;
+  }
+  
+  .fz22 {
+    font-size: 22px;
+  }
+  
+  .fz20 {
+    font-size: 20px;
+  }
+  
+  .fz18 {
+    font-size: 18px;
+  }
+  
+  .fz16 {
+    font-size: 16px;
+  }
+  
+  .fz14 {
+    font-size: 14px;
+  }
+  
+  .fz12 {
+    font-size: 12px;
+  }
+  
+  .fz10 {
+    font-size: 10px;
+  }
+
+
+#app{
+    width: 100%;
+    height: 100%;
+}
+
+/* 浮动 */
+.left {
+    float: left;
+}
+.right {
+    float: right;
+}
+/* 清除浮动 */
+.clearfix {
+    zoom: 1;
+}
+.clearfix::before,
+.clearfix::after {
+    content: "";
+    height: 0;
+    line-height: 0;
+    display: table;
+    visibility: hidden;
+    clear: both;
+}
+
+.hide {
+  display: none;
+}
+
+/* 确定按钮 width90%  */
+.button-width-90{
+    width: 90%;
+    height: 50px;
+    background: #FD6427;
+    box-shadow: 0px 40px 30px -20px rgba(253, 100, 39, 0.5);
+    border: 0;
+    border-radius: 47px;
+    font-size:17px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    margin:0px auto;
+    display: block;
+}
