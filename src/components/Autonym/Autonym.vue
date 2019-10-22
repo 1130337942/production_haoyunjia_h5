@@ -158,7 +158,8 @@ export default {
   methods: {
     //导航栏
     onClickLeft() {
-      this.$router.push({ path: "/Login" });
+      // this.$router.push({ path: "/Login" });
+      this.$router.go(-1)
     },
     //上传
     upfile1(e) {

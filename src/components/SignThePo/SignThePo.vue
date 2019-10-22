@@ -51,10 +51,10 @@
           <p class="right">
             <span>
               <template v-if="item.signStatus == 1">
-                <button class="signBtn" @click="sign(item.id)" style='background: rgba(253,100,39,1);'>签署</button>
+                <button class="signBtn" @click="sign(item.id,item.contFlag)" style='background: rgba(253,100,39,1);'>签署</button>
               </template>
               <template v-else>
-                <button class="signBtn" @click="sign(item.id)" style='background: white; border: 1px rgb(253, 100, 39) solid;color: rgb(253, 100, 39);'>查看</button>
+                <button class="signBtn" @click="sign(item.id,item.contFlag)" style='background: white; border: 1px rgb(253, 100, 39) solid;color: rgb(253, 100, 39);'>查看</button>
               </template>
             </span>
           </p>
@@ -62,18 +62,40 @@
         </li>
       </ul>
     </div>
+    <!---->
+    <Eldialog  :class="isEldialog?'show':'hide'">
+      <div class="content" slot="content">
+        <div class="cont_test">{{eldialog_cont}}</div>
+      </div>
+      <div slot="button">
+        <div class="but confirm" @click="confirm" :isEldialogShow="isEldialog">{{eldialogButText}}</div>
+      </div>
+    </Eldialog >
   </div>
 </template>
 <script>
-import { logout,list,getSignUrl } from "../../api/api";
+import { logout,list,getSignUrl,isPass } from "../../api/api";
+const Eldialog = ()=>import('@/components/common/Eldialog.vue')
 export default {
   name: "SignThePo",
   data() {
     return {
       allCount: "",
       waitSignCount: "",
-      pcContInfoVOList: [] //列表
+      pcContInfoVOList: [],//列表
+      isEldialog : false,//自定义弹框组件
+      eldialog_cont:'',//自由职业者弹框内容
+      isFreelance:false,//是否是自由职业者
+      isAuth:false,//是否实名认证
+      eldialogButText:""
     };
+  },
+  components:{
+    Eldialog
+  },
+  created() {
+    this.list1(1);
+    this.isPass1()
   },
   methods: {
     //导航栏
@@ -82,11 +104,11 @@ export default {
     },
     //退出
     onClickRight(){
-        this.$cookie.remove("token");
-        this.$cookie.remove("intermediary");
       let param = {param:JSON.stringify({})}
          logout(param).then(result => {
           if(result.code == "000000"){
+            this.$cookie.remove("token");
+            this.$cookie.remove("intermediary");
             this.router.push({ path: "/Login" });
           }else if(result.code == "100000"){
             //this.toast.fail(result.message);
@@ -105,10 +127,10 @@ export default {
             secondCompanyId: this.$cookie.get("currentCompanyId"),
             tab: tab
           }),
-          pageParam: {
-            pageIndex: 0, //第几页
-            pageSize: 100 //每页几条
-          }
+          // pageParam: {
+          //   pageIndex: 0, //第几页
+          //   pageSize: 100 //每页几条
+          // }
         }
          list(param).then(result => {
           if (result.code == '000000') {
@@ -116,7 +138,8 @@ export default {
             this.waitSignCount = result.data.waitSignCount; //带签署
             this.pcContInfoVOList = result.data.pcContInfoVOList;
       		} else if (result.code == '100000') {
-            //this.$toast.fail(result.message);
+            // console.log(result.message)
+            // this.$toast.fail(result.message);
             this.$toast.fail('系统错误');
       		}
           
@@ -127,11 +150,12 @@ export default {
         });
     },
     //签署
-    sign(name) {
+    sign(name,contFlag) {
       var $cookie = this.$cookie;
         let param = {
           param: JSON.stringify({
-            contId: name
+            contId: name,
+            contFlag:contFlag
           })
         }
          getSignUrl(param).then(result => {
@@ -146,11 +170,60 @@ export default {
           //   alert('请求失败')
           //    console.log(error)
         });
-    }
+    },
+    //是否是自由职业者和是否已认证判断
+    isPass1() {
+      var $cookie = this.$cookie;
+      let param = { param: JSON.stringify({}) };
+      isPass(param)
+        .then(result => {
+          // console.log(result);
+          if (result.code == "000000") {
+            if (result.data.isFreelance == false) {
+              //是否是自由职业者
+              this.isEldialog = true;
+              this.eldialog_cont = '您还不是自由职业者，请先申请成为自由职业者！';
+              this.eldialogButText = '申请'
+              // this.$router.push({ path: "/liberalProfessions" });
+            } else if (result.data.isFreelance == true) {
+              this.isFreelance = true //是自由职业者
+              if (result.data.isAuth == false) {
+                this.isEldialog = true;
+                this.eldialog_cont = '您还没通过个人实名认证，请先认证！'
+                this.eldialogButText = '个人认证'
+                //是否已认证
+                // this.$router.push({ path: "/Autonym" });
+              } else if (result.data.isAuth == true) {
+                this.isAuth = true; //已经实名认证
+                this.$cookie.set("intermediary", this.intermediary); //满足所有条件把110保存在cookie上面
+                //  console.log(this.intermediary);
+                // this.$router.push({ path: "/SignThePo" });
+              }
+            }
+          } else if (result.code == "100000") {
+            //this.toast.fail(result.message);
+            this.$toast.fail("系统错误");
+          }
+        })
+        .catch(error => {
+          //   alert('请求失败')
+          //    console.log(error)
+        });
+    },
+    confirm(){
+      this.isEldialog = false;
+      if(!this.isFreelance){//不是自由职业者
+        this.$router.push({ path: "/liberalProfessions" });
+      }else{
+        if(!this.isAuth){//没有实名认证
+          this.$router.push({ path: "/Autonym"});
+        }
+      }
+      
+    },
   },
-  created() {
-    this.list1(1);
-  }
+  
+  
 };
 </script>
 

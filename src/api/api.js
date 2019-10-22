@@ -169,3 +169,10 @@ export function bankOcr (params) {
   const param = params
   return  AxiosPost(url, param)
 }
+//个性化配置
+export function getByOrgAndCompanyId (params) {
+  const url = VUE_APP_export + '/orgDiv/rest/getByOrgAndCompanyId'
+  const param = params
+  return  AxiosPost(url, param)
+}
+

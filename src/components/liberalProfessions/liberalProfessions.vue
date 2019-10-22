@@ -41,10 +41,15 @@ export default {
       checked:true
     };
   },
+  created() {
+    this.getDictItemsByCodes1();
+   
+  },
   methods: {
     //导航栏
     onClickLeft() {
-      this.$router.push({ path: "/Login" });
+      // this.$router.push({ path: "/Login" });
+      this.$router.go(-1)
     },
     selectCheckbox(data, index) {
       this.dataDictPO[index].select = true;
@@ -106,10 +111,8 @@ export default {
           this.$router.push('/Login');
         });
     }
-  },
-  created() {
-    this.getDictItemsByCodes1();
   }
+ 
 };
 </script>
 <style lang='scss' scoped>

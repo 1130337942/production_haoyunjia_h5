@@ -7,12 +7,15 @@ export default new Router({
     // base: '/hot/', 
     routes: [
         {
+            path: '/',
+            redirect: '/unauthorized',
+        },
+        {
             path: '/Login',
             name: 'Login',
             meta:{
                 title:'一招盈零工平台'
             },
- 
             component: () => import ('@/components/Login/Login')
         },
         // {
@@ -46,6 +49,11 @@ export default new Router({
                 title:'实名认证'
             },
             component: () => import ('@/components/Autonym/Autonym')
+        },
+        {
+            path: '/unauthorized', //未授权
+            name: 'unauthorized',
+            component: () => import ('@/components/Login/unauthorized')
         }
     ]
 

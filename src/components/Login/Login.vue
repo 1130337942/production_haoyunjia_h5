@@ -4,16 +4,20 @@
 
     <div style="padding:30px;">
       <div class="margin-bottom-10 label">绑定手机号</div>
-
+      <!-- readonly
+          clickable -->
       <van-cell-group>
         <van-field
-          v-model="ruleForm.phone"
+          :value="ruleForm.phone"
           :input="onChange()"
-          type="text"
           placeholder="请输入手机号"
+          readonly
+          clickable
           maxlength="11"
+          :focused="showPhoneKeyboard"
+          @touchstart.native.stop="showPhoneKeyboard = true;showKeyboard = false;"
         >
-          <van-button slot="button" round class="but1" @click="sendCode">{{buttonText}}</van-button>
+          <van-button slot="button" round :class="[ isVantButBg?'but1':'but2' ,'vantBut']" @click="sendCode">{{buttonText}}</van-button>
         </van-field>
       </van-cell-group>
       <div :class="isErrText?'err-text-show':'err-text-hide'" class="err-text">{{errText}}</div>
@@ -26,14 +30,22 @@
         :mask="false"
         :gutter="15"
         info="验证码为 4 位数字"
-        @focus="showKeyboard = true"
+        :focused="showKeyboard"
+        @focus="showKeyboard = true;showPhoneKeyboard = false"
       />
+
       <!-- 数字键盘 -->
       <van-number-keyboard
         :show="showKeyboard"
         @input="onInput"
         @delete="onDelete"
         @blur="showKeyboard = false"
+      />
+      <van-number-keyboard
+        v-model="ruleForm.phone"
+        :show="showPhoneKeyboard"
+        :maxlength="11"
+        @blur="showPhoneKeyboard = false"
       />
     </div>
     <button class="button-width-90 submitBtn" @click="wxauth1">确定</button>
@@ -51,7 +63,7 @@ export default {
         phone: "",
         verifyCode: ""
       },
-      showKeyboard: true,
+      showKeyboard: false,
       isErrText: false,
       buttonText: "发送验证码",
       flag: false,
@@ -59,8 +71,14 @@ export default {
       intermediary: "110", //控制页面刷新时该去那个页面
       errText: "",
       isHas: false,
-      isDisabled: true // 是否禁止点击发送验证码按钮
+      isDisabled: true,// 是否禁止点击发送验证码按钮
+      isVantButBg:true, // 按钮背景颜色
+      showPhoneKeyboard:true,//手机号键盘
+     
     };
+  },
+  created() {
+    document.title = sessionStorage.getItem('title');
   },
   mounted() {},
   methods: {
@@ -113,6 +131,7 @@ export default {
           this.flag = false;
 
           let timer = setInterval(() => {
+            this.isVantButBg = false
             time--;
             this.buttonText = time + " 秒";
             if (time === 0) {
@@ -120,6 +139,7 @@ export default {
               this.buttonText = "重新获取";
               this.isDisabled = true;
               this.flag = true;
+              this.isVantButBg = true
             }
           }, 1000);
         }
@@ -139,7 +159,7 @@ export default {
       wxauth(param)
         .then(result => {
           if (result.code == "000000") {
-            this.isPass1();
+            // this.isPass1();
             this.$cookie.set("token", result.data.token);
             this.userMobile = result.data.mobile;
             this.$cookie.set("currentCompanyId", result.data.currentCompanyId); //公司ID
@@ -148,6 +168,7 @@ export default {
               result.data.currentCompanyName
             ); //公司名
             this.$cookie.set("mobile", this.userMobile); //手机号
+            this.$router.push({ path: "/SignThePo" });
           } else if (result.code == "100000") {
             //this.$toast.fail(result.message);
             this.$toast.fail("系统错误");
@@ -162,7 +183,8 @@ export default {
     getWxVerifyCode1() {
       let param = {
         param: JSON.stringify({
-          mobile: this.ruleForm.phone
+          mobile: this.ruleForm.phone,
+          domain:window.location.host,
         })
       };
       getWxVerifyCode(param)
@@ -249,12 +271,23 @@ export default {
   /deep/ .van-cell .van-cell__value {
     overflow: initial;
   }
-  .but1 {
-    background: rgba(253, 100, 39, 1);
+  /deep/ .van-field__control{
+    height: 40px;
+    line-height: 40px;
+  }  
+  .vantBut{
     color: #fff;
-    box-shadow: 0px 30px 40px -10px rgba(253, 100, 39, 0.5);
     width: 100px;
     padding: 0px 10px;
+  }
+  .but1 {
+    background: rgba(253, 100, 39, 1);
+    box-shadow: 0px 30px 40px -10px rgba(253, 100, 39, 0.5);
+  }
+  .but2{
+    background: #cccccc;
+    pointer-events:none;
+    box-shadow: 0px 30px 40px -10px rgba(121, 120, 119, 0.5);
   }
   .h1-text {
     font-size: 15px;

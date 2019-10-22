@@ -56,7 +56,15 @@ module.exports = {
     // dll: false,
     // PWA 插件相关配置
     // see https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
-    pwa: {},
+    pwa         : {
+      iconPaths: {
+        favicon32     : 'combo.png',
+        favicon16     : 'favicon.ico',
+        appleTouchIcon: 'favicon.ico',
+        maskIcon      : 'favicon.ico',
+        msTileImage   : 'favicon.ico'
+      }
+    },
     // webpack-dev-server 相关配置
     devServer: {
      open: process.platform === 'darwin',
